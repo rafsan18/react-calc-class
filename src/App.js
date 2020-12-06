@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Button from "./components/Button";
-import "./css/style.css";
 
 class App extends Component {
     constructor(props) {
@@ -9,47 +8,20 @@ class App extends Component {
         this.state = {
             current: "0",
             previous: [],
-            nextIsReset: false,
         };
     }
 
     reset = () => {
-        this.setState({ current: "0", previous: [], nextIsReset: false });
+        console.log("reset");
     };
-
-    addToCurrent = (symbol) => {
-        if (["/", "-", "+", "*"].indexOf(symbol) > -1) {
-            let { previous } = this.state;
-            previous.push(this.state.current + symbol);
-            this.setState({ previous, nextIsReset: true });
-        } else {
-            if (
-                (this.state.current === "0" && symbol !== ".") ||
-                this.state.nextIsReset
-            ) {
-                this.setState({ current: symbol, nextIsReset: false });
-            } else {
-                this.setState({ current: this.state.current + symbol });
-            }
-        }
-    };
-
-    calculate = (symbol) => {
-        let { current, previous, nextIsReset } = this.state;
-        if (previous.length > 0) {
-            current = eval(String(previous[previous.length - 1] + current));
-            this.setState({ current, previous: [], nextIsReset: true });
-        }
-    };
-
     removeLast = () => {
-        let { current } = this.state;
-
-        if (current.length > 0) {
-            this.setState({ current: current.slice(0, -1) });
-        } else {
-            this.setState({ current: "0" });
-        }
+        console.log("removeLast");
+    };
+    addToCurrent = () => {
+        console.log("addToCurrent");
+    };
+    calculate = () => {
+        console.log("claculate");
     };
     render() {
         const buttons = [
@@ -74,24 +46,14 @@ class App extends Component {
         ];
         return (
             <div className="calc-container">
-                {this.state.previous.length > 0 ? (
-                    <div className="floaty-last">
-                        {this.state.previous[this.state.previous.length - 1]}
-                    </div>
-                ) : null}
-                <input
-                    type="text"
-                    className="result "
-                    value={this.state.current}
-                />
-
+                <input type="text" className="current" />
                 {buttons.map((btn, index) => {
                     return (
                         <Button
-                            key={index}
                             symbol={btn.symbol}
                             cols={btn.cols}
-                            action={(symbol) => btn.action(symbol)}
+                            action={btn.action}
+                            key={index}
                         />
                     );
                 })}
